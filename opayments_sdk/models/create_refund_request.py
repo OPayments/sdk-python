@@ -20,6 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from opayments_sdk.models.refund_reason import RefundReason
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -29,8 +30,10 @@ class CreateRefundRequest(BaseModel):
     CreateRefundRequest
     """ # noqa: E501
     amount: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, description="Сумма в копейках.")
-    reason: Optional[Annotated[str, Field(strict=True, max_length=255)]] = None
-    __properties: ClassVar[List[str]] = ["amount", "reason"]
+    reason_code: Optional[RefundReason] = Field(default=None, alias="reasonCode")
+    reason_comment: Optional[Annotated[str, Field(strict=True, max_length=255)]] = Field(default=None, alias="reasonComment")
+    reason: Optional[Annotated[str, Field(strict=True, max_length=255)]] = Field(default=None, description="Устаревшее произвольное описание причины. Новые клиенты используют reasonCode и опционально reasonComment.")
+    __properties: ClassVar[List[str]] = ["amount", "reasonCode", "reasonComment", "reason"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -84,6 +87,8 @@ class CreateRefundRequest(BaseModel):
 
         _obj = cls.model_validate({
             "amount": obj.get("amount"),
+            "reasonCode": obj.get("reasonCode"),
+            "reasonComment": obj.get("reasonComment"),
             "reason": obj.get("reason")
         })
         return _obj

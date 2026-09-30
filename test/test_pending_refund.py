@@ -35,10 +35,13 @@ class TestPendingRefund(unittest.TestCase):
         model = PendingRefund()
         if include_optional:
             return PendingRefund(
+                refund_id = '',
                 payment_id = '',
                 amount = 1,
                 currency = 'RUB',
                 status = 'pending',
+                reason_code = 'requested_by_customer',
+                reason_comment = '',
                 reason = '',
                 failure_code = '',
                 failure_message = '',
@@ -49,6 +52,7 @@ class TestPendingRefund(unittest.TestCase):
             )
         else:
             return PendingRefund(
+                refund_id = '',
                 payment_id = '',
                 amount = 1,
                 currency = 'RUB',

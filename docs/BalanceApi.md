@@ -89,7 +89,7 @@ This endpoint does not need any parameter.
 **400** | Некорректные параметры запроса. |  * X-Request-Id -  <br>  |
 **401** | Не пройдена аутентификация или проверка подписи. |  * X-Request-Id -  <br>  |
 **429** | Превышен лимит запросов. |  * X-Request-Id -  <br>  * X-RateLimit-Limit -  <br>  * X-RateLimit-Remaining -  <br>  * X-RateLimit-Reset - Unix-время сброса лимита. <br>  * Retry-After -  <br>  |
-**503** | Сервис временно недоступен. |  * X-Request-Id -  <br>  |
+**503** | Сервис временно недоступен. |  * X-Request-Id -  <br>  * Retry-After -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

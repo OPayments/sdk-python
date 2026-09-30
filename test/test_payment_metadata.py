@@ -14,10 +14,10 @@
 
 import unittest
 
-from opayments_sdk.models.create_refund_request import CreateRefundRequest
+from opayments_sdk.models.payment_metadata import PaymentMetadata
 
-class TestCreateRefundRequest(unittest.TestCase):
-    """CreateRefundRequest unit test stubs"""
+class TestPaymentMetadata(unittest.TestCase):
+    """PaymentMetadata unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,28 +25,27 @@ class TestCreateRefundRequest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> CreateRefundRequest:
-        """Test CreateRefundRequest
+    def make_instance(self, include_optional) -> PaymentMetadata:
+        """Test PaymentMetadata
             include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `CreateRefundRequest`
+        # uncomment below to create an instance of `PaymentMetadata`
         """
-        model = CreateRefundRequest()
+        model = PaymentMetadata()
         if include_optional:
-            return CreateRefundRequest(
-                amount = 1,
-                reason_code = 'requested_by_customer',
-                reason_comment = '',
-                reason = ''
+            return PaymentMetadata(
+                ip = '',
+                device_data = {platformType=desktop, os=macOS, browser=Chrome, language=ru-RU, timezoneName=Europe/Moscow, userAgent=Mozilla/5.0}
             )
         else:
-            return CreateRefundRequest(
+            return PaymentMetadata(
+                ip = '',
         )
         """
 
-    def testCreateRefundRequest(self):
-        """Test CreateRefundRequest"""
+    def testPaymentMetadata(self):
+        """Test PaymentMetadata"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

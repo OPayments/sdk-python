@@ -5,10 +5,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**refund_id** | **UUID** |  | 
 **payment_id** | **UUID** |  | 
 **amount** | **int** | Сумма в копейках. | 
 **currency** | **str** |  | 
 **status** | **str** |  | 
+**reason_code** | [**RefundReason**](RefundReason.md) |  | [optional] 
+**reason_comment** | **str** |  | [optional] 
 **reason** | **str** |  | [optional] 
 **failure_code** | **str** |  | [optional] 
 **failure_message** | **str** |  | [optional] 

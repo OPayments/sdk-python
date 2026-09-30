@@ -37,20 +37,21 @@ class TestCreateSbpPaymentRequest(unittest.TestCase):
             return CreateSbpPaymentRequest(
                 order_id = '0',
                 amount = 1,
-                currency = 'RUB',
                 description = '',
-                ip = '',
+                metadata = opayments_sdk.models.payment_metadata.PaymentMetadata(
+                    ip = '', 
+                    device_data = {platformType=desktop, os=macOS, browser=Chrome, language=ru-RU, timezoneName=Europe/Moscow, userAgent=Mozilla/5.0}, ),
                 callback_url = 'https:/',
                 success_url = 'https:/',
-                failed_url = 'https:/',
-                device_data = {platformType=desktop, os=macOS, browser=Chrome, language=ru-RU, timezoneName=Europe/Moscow, userAgent=Mozilla/5.0}
+                failed_url = 'https:/'
             )
         else:
             return CreateSbpPaymentRequest(
                 order_id = '0',
                 amount = 1,
-                currency = 'RUB',
-                ip = '',
+                metadata = opayments_sdk.models.payment_metadata.PaymentMetadata(
+                    ip = '', 
+                    device_data = {platformType=desktop, os=macOS, browser=Chrome, language=ru-RU, timezoneName=Europe/Moscow, userAgent=Mozilla/5.0}, ),
                 callback_url = 'https:/',
                 success_url = 'https:/',
                 failed_url = 'https:/',

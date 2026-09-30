@@ -22,6 +22,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from uuid import UUID
+from opayments_sdk.models.refund_reason import RefundReason
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -30,10 +31,13 @@ class PendingRefund(BaseModel):
     """
     PendingRefund
     """ # noqa: E501
+    refund_id: UUID = Field(alias="refundId")
     payment_id: UUID = Field(alias="paymentId")
     amount: Annotated[int, Field(strict=True, ge=1)] = Field(description="Сумма в копейках.")
     currency: StrictStr
     status: StrictStr
+    reason_code: Optional[RefundReason] = Field(default=None, alias="reasonCode")
+    reason_comment: Optional[Annotated[str, Field(strict=True, max_length=255)]] = Field(default=None, alias="reasonComment")
     reason: Optional[StrictStr] = None
     failure_code: Optional[StrictStr] = Field(default=None, alias="failureCode")
     failure_message: Optional[StrictStr] = Field(default=None, alias="failureMessage")
@@ -41,7 +45,7 @@ class PendingRefund(BaseModel):
     declined_at: Optional[datetime] = Field(default=None, alias="declinedAt")
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
-    __properties: ClassVar[List[str]] = ["paymentId", "amount", "currency", "status", "reason", "failureCode", "failureMessage", "acceptedAt", "declinedAt", "createdAt", "updatedAt"]
+    __properties: ClassVar[List[str]] = ["refundId", "paymentId", "amount", "currency", "status", "reasonCode", "reasonComment", "reason", "failureCode", "failureMessage", "acceptedAt", "declinedAt", "createdAt", "updatedAt"]
 
     @field_validator('currency')
     def currency_validate_enum(cls, value):
@@ -108,10 +112,13 @@ class PendingRefund(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "refundId": obj.get("refundId"),
             "paymentId": obj.get("paymentId"),
             "amount": obj.get("amount"),
             "currency": obj.get("currency"),
             "status": obj.get("status"),
+            "reasonCode": obj.get("reasonCode"),
+            "reasonComment": obj.get("reasonComment"),
             "reason": obj.get("reason"),
             "failureCode": obj.get("failureCode"),
             "failureMessage": obj.get("failureMessage"),

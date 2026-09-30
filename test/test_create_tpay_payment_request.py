@@ -37,24 +37,20 @@ class TestCreateTpayPaymentRequest(unittest.TestCase):
             return CreateTpayPaymentRequest(
                 order_id = '0',
                 amount = 1,
-                currency = 'RUB',
                 description = '',
-                ip = '',
+                metadata = None,
                 callback_url = 'https:/',
                 success_url = 'https:/',
-                failed_url = 'https:/',
-                device_data = None
+                failed_url = 'https:/'
             )
         else:
             return CreateTpayPaymentRequest(
                 order_id = '0',
                 amount = 1,
-                currency = 'RUB',
-                ip = '',
+                metadata = None,
                 callback_url = 'https:/',
                 success_url = 'https:/',
                 failed_url = 'https:/',
-                device_data = None,
         )
         """
 

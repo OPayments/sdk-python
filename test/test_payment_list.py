@@ -36,7 +36,7 @@ class TestPaymentList(unittest.TestCase):
         if include_optional:
             return PaymentList(
                 items = [
-                    {paymentId=c9ee7c85-4cc0-494f-a0de-0af7257a66a6, orderId=order-20260903-001, amount=150000, currency=RUB, description=Подписка за сентябрь, paymentMethod=sbp, status=pending, paymentUrl=https://pay.opayments.io/sbp/c9ee7c85-4cc0-494f-a0de-0af7257a66a6, expiresAt=2026-09-03T12:30:00.000+00:00, createdAt=2026-09-03T12:00:00.000+00:00, updatedAt=2026-09-03T12:00:00.000+00:00}
+                    {paymentId=c9ee7c85-4cc0-494f-a0de-0af7257a66a6, orderId=order-20260903-001, amount=150000, currency=RUB, description=Подписка за сентябрь, paymentMethod=sbp, status=pending, paymentUrl=https://pay.opayments.io/sbp/c9ee7c85-4cc0-494f-a0de-0af7257a66a6, createdAt=2026-09-03T12:00:00Z, updatedAt=2026-09-03T12:00:00Z}
                     ],
                 next_cursor = '',
                 has_more = True
@@ -44,7 +44,7 @@ class TestPaymentList(unittest.TestCase):
         else:
             return PaymentList(
                 items = [
-                    {paymentId=c9ee7c85-4cc0-494f-a0de-0af7257a66a6, orderId=order-20260903-001, amount=150000, currency=RUB, description=Подписка за сентябрь, paymentMethod=sbp, status=pending, paymentUrl=https://pay.opayments.io/sbp/c9ee7c85-4cc0-494f-a0de-0af7257a66a6, expiresAt=2026-09-03T12:30:00.000+00:00, createdAt=2026-09-03T12:00:00.000+00:00, updatedAt=2026-09-03T12:00:00.000+00:00}
+                    {paymentId=c9ee7c85-4cc0-494f-a0de-0af7257a66a6, orderId=order-20260903-001, amount=150000, currency=RUB, description=Подписка за сентябрь, paymentMethod=sbp, status=pending, paymentUrl=https://pay.opayments.io/sbp/c9ee7c85-4cc0-494f-a0de-0af7257a66a6, createdAt=2026-09-03T12:00:00Z, updatedAt=2026-09-03T12:00:00Z}
                     ],
                 next_cursor = '',
                 has_more = True,

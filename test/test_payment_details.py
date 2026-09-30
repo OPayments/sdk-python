@@ -43,13 +43,18 @@ class TestPaymentDetails(unittest.TestCase):
                 payment_method = 'sbp',
                 status = 'pending',
                 payment_url = '',
-                expires_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 failure_code = '',
                 failure_message = '',
+                refund_summary = opayments_sdk.models.refund_summary.RefundSummary(
+                    refunded_amount = 0, 
+                    refundable_amount = 0, 
+                    refund_count = 0, ),
                 completed_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                refund = {paymentId=c9ee7c85-4cc0-494f-a0de-0af7257a66a6, amount=50000, currency=RUB, status=accepted, reason=Возврат товара, acceptedAt=2026-09-03T12:06:00.000+00:00, createdAt=2026-09-03T12:05:00.000+00:00, updatedAt=2026-09-03T12:05:00.000+00:00}
+                refunds = [
+                    {refundId=1d157da7-e7bb-48d8-9b02-5efc00c8c6d0, paymentId=c9ee7c85-4cc0-494f-a0de-0af7257a66a6, amount=50000, currency=RUB, status=accepted, reason=Возврат товара, acceptedAt=2026-09-03T12:06:00Z, createdAt=2026-09-03T12:05:00Z, updatedAt=2026-09-03T12:05:00Z}
+                    ]
             )
         else:
             return PaymentDetails(

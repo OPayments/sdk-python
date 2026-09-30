@@ -322,9 +322,13 @@ class PaymentsApi:
         amount_to: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Не меньше amountFrom, если он передан.")] = None,
         created_from: Annotated[Optional[datetime], Field(description="Не позже createdTo, если он передан.")] = None,
         created_to: Annotated[Optional[datetime], Field(description="Не раньше createdFrom, если он передан.")] = None,
+        completed_from: Annotated[Optional[datetime], Field(description="Не позже completedTo, если он передан.")] = None,
+        completed_to: Annotated[Optional[datetime], Field(description="Не раньше completedFrom, если он передан.")] = None,
+        failure_code: Annotated[Optional[Annotated[str, Field(strict=True, max_length=128)]], Field(description="Нормализованный код причины платежа.")] = None,
+        search: Annotated[Optional[Annotated[str, Field(strict=True, max_length=128)]], Field(description="Поиск по paymentId, orderId и описанию платежа.")] = None,
         sort: Optional[StrictStr] = None,
         sort_direction: Optional[StrictStr] = None,
-        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой.")] = None,
+        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Количество записей в ответе.")] = None,
         _request_timeout: Union[
             None,
@@ -357,11 +361,19 @@ class PaymentsApi:
         :type created_from: datetime
         :param created_to: Не раньше createdFrom, если он передан.
         :type created_to: datetime
+        :param completed_from: Не позже completedTo, если он передан.
+        :type completed_from: datetime
+        :param completed_to: Не раньше completedFrom, если он передан.
+        :type completed_to: datetime
+        :param failure_code: Нормализованный код причины платежа.
+        :type failure_code: str
+        :param search: Поиск по paymentId, orderId и описанию платежа.
+        :type search: str
         :param sort:
         :type sort: str
         :param sort_direction:
         :type sort_direction: str
-        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой.
+        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.
         :type cursor: str
         :param limit: Количество записей в ответе.
         :type limit: int
@@ -395,6 +407,10 @@ class PaymentsApi:
             amount_to=amount_to,
             created_from=created_from,
             created_to=created_to,
+            completed_from=completed_from,
+            completed_to=completed_to,
+            failure_code=failure_code,
+            search=search,
             sort=sort,
             sort_direction=sort_direction,
             cursor=cursor,
@@ -433,9 +449,13 @@ class PaymentsApi:
         amount_to: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Не меньше amountFrom, если он передан.")] = None,
         created_from: Annotated[Optional[datetime], Field(description="Не позже createdTo, если он передан.")] = None,
         created_to: Annotated[Optional[datetime], Field(description="Не раньше createdFrom, если он передан.")] = None,
+        completed_from: Annotated[Optional[datetime], Field(description="Не позже completedTo, если он передан.")] = None,
+        completed_to: Annotated[Optional[datetime], Field(description="Не раньше completedFrom, если он передан.")] = None,
+        failure_code: Annotated[Optional[Annotated[str, Field(strict=True, max_length=128)]], Field(description="Нормализованный код причины платежа.")] = None,
+        search: Annotated[Optional[Annotated[str, Field(strict=True, max_length=128)]], Field(description="Поиск по paymentId, orderId и описанию платежа.")] = None,
         sort: Optional[StrictStr] = None,
         sort_direction: Optional[StrictStr] = None,
-        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой.")] = None,
+        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Количество записей в ответе.")] = None,
         _request_timeout: Union[
             None,
@@ -468,11 +488,19 @@ class PaymentsApi:
         :type created_from: datetime
         :param created_to: Не раньше createdFrom, если он передан.
         :type created_to: datetime
+        :param completed_from: Не позже completedTo, если он передан.
+        :type completed_from: datetime
+        :param completed_to: Не раньше completedFrom, если он передан.
+        :type completed_to: datetime
+        :param failure_code: Нормализованный код причины платежа.
+        :type failure_code: str
+        :param search: Поиск по paymentId, orderId и описанию платежа.
+        :type search: str
         :param sort:
         :type sort: str
         :param sort_direction:
         :type sort_direction: str
-        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой.
+        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.
         :type cursor: str
         :param limit: Количество записей в ответе.
         :type limit: int
@@ -506,6 +534,10 @@ class PaymentsApi:
             amount_to=amount_to,
             created_from=created_from,
             created_to=created_to,
+            completed_from=completed_from,
+            completed_to=completed_to,
+            failure_code=failure_code,
+            search=search,
             sort=sort,
             sort_direction=sort_direction,
             cursor=cursor,
@@ -544,9 +576,13 @@ class PaymentsApi:
         amount_to: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Не меньше amountFrom, если он передан.")] = None,
         created_from: Annotated[Optional[datetime], Field(description="Не позже createdTo, если он передан.")] = None,
         created_to: Annotated[Optional[datetime], Field(description="Не раньше createdFrom, если он передан.")] = None,
+        completed_from: Annotated[Optional[datetime], Field(description="Не позже completedTo, если он передан.")] = None,
+        completed_to: Annotated[Optional[datetime], Field(description="Не раньше completedFrom, если он передан.")] = None,
+        failure_code: Annotated[Optional[Annotated[str, Field(strict=True, max_length=128)]], Field(description="Нормализованный код причины платежа.")] = None,
+        search: Annotated[Optional[Annotated[str, Field(strict=True, max_length=128)]], Field(description="Поиск по paymentId, orderId и описанию платежа.")] = None,
         sort: Optional[StrictStr] = None,
         sort_direction: Optional[StrictStr] = None,
-        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой.")] = None,
+        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Количество записей в ответе.")] = None,
         _request_timeout: Union[
             None,
@@ -579,11 +615,19 @@ class PaymentsApi:
         :type created_from: datetime
         :param created_to: Не раньше createdFrom, если он передан.
         :type created_to: datetime
+        :param completed_from: Не позже completedTo, если он передан.
+        :type completed_from: datetime
+        :param completed_to: Не раньше completedFrom, если он передан.
+        :type completed_to: datetime
+        :param failure_code: Нормализованный код причины платежа.
+        :type failure_code: str
+        :param search: Поиск по paymentId, orderId и описанию платежа.
+        :type search: str
         :param sort:
         :type sort: str
         :param sort_direction:
         :type sort_direction: str
-        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой.
+        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.
         :type cursor: str
         :param limit: Количество записей в ответе.
         :type limit: int
@@ -617,6 +661,10 @@ class PaymentsApi:
             amount_to=amount_to,
             created_from=created_from,
             created_to=created_to,
+            completed_from=completed_from,
+            completed_to=completed_to,
+            failure_code=failure_code,
+            search=search,
             sort=sort,
             sort_direction=sort_direction,
             cursor=cursor,
@@ -650,6 +698,10 @@ class PaymentsApi:
         amount_to,
         created_from,
         created_to,
+        completed_from,
+        completed_to,
+        failure_code,
+        search,
         sort,
         sort_direction,
         cursor,
@@ -722,6 +774,40 @@ class PaymentsApi:
                 )
             else:
                 _query_params.append(('createdTo', created_to))
+            
+        if completed_from is not None:
+            if isinstance(completed_from, datetime):
+                _query_params.append(
+                    (
+                        'completedFrom',
+                        completed_from.strftime(
+                            self.api_client.configuration.datetime_format
+                        )
+                    )
+                )
+            else:
+                _query_params.append(('completedFrom', completed_from))
+            
+        if completed_to is not None:
+            if isinstance(completed_to, datetime):
+                _query_params.append(
+                    (
+                        'completedTo',
+                        completed_to.strftime(
+                            self.api_client.configuration.datetime_format
+                        )
+                    )
+                )
+            else:
+                _query_params.append(('completedTo', completed_to))
+            
+        if failure_code is not None:
+            
+            _query_params.append(('failureCode', failure_code))
+            
+        if search is not None:
+            
+            _query_params.append(('search', search))
             
         if sort is not None:
             

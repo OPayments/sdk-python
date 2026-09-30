@@ -43,9 +43,12 @@ class TestCreatedPayment(unittest.TestCase):
                 payment_method = 'sbp',
                 status = 'pending',
                 payment_url = '',
-                expires_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 failure_code = '',
                 failure_message = '',
+                refund_summary = opayments_sdk.models.refund_summary.RefundSummary(
+                    refunded_amount = 0, 
+                    refundable_amount = 0, 
+                    refund_count = 0, ),
                 completed_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f')
@@ -59,7 +62,6 @@ class TestCreatedPayment(unittest.TestCase):
                 payment_method = 'sbp',
                 status = 'pending',
                 payment_url = '',
-                expires_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
         )

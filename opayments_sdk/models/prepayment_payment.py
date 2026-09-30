@@ -22,6 +22,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from uuid import UUID
+from opayments_sdk.models.refund_summary import RefundSummary
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -38,13 +39,13 @@ class PrepaymentPayment(BaseModel):
     payment_method: StrictStr = Field(alias="paymentMethod")
     status: StrictStr
     payment_url: Optional[StrictStr] = Field(default=None, description="Адрес оплаты для платежа в статусе pending.", alias="paymentUrl")
-    expires_at: Optional[datetime] = Field(default=None, alias="expiresAt")
     failure_code: Optional[StrictStr] = Field(default=None, alias="failureCode")
-    failure_message: Optional[StrictStr] = Field(default=None, alias="failureMessage")
+    failure_message: Optional[StrictStr] = Field(default=None, description="Нормализованное сообщение, безопасное для показа мерчанту; никогда не содержит сырой ответ провайдера, credentials или данные карты.", alias="failureMessage")
+    refund_summary: Optional[RefundSummary] = Field(default=None, alias="refundSummary")
     completed_at: Optional[datetime] = Field(default=None, alias="completedAt")
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
-    __properties: ClassVar[List[str]] = ["paymentId", "orderId", "amount", "currency", "description", "paymentMethod", "status", "paymentUrl", "expiresAt", "failureCode", "failureMessage", "completedAt", "createdAt", "updatedAt"]
+    __properties: ClassVar[List[str]] = ["paymentId", "orderId", "amount", "currency", "description", "paymentMethod", "status", "paymentUrl", "failureCode", "failureMessage", "refundSummary", "completedAt", "createdAt", "updatedAt"]
 
     @field_validator('currency')
     def currency_validate_enum(cls, value):
@@ -106,6 +107,9 @@ class PrepaymentPayment(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of refund_summary
+        if self.refund_summary:
+            _dict['refundSummary'] = self.refund_summary.to_dict()
         return _dict
 
     @classmethod
@@ -126,9 +130,9 @@ class PrepaymentPayment(BaseModel):
             "paymentMethod": obj.get("paymentMethod"),
             "status": obj.get("status"),
             "paymentUrl": obj.get("paymentUrl"),
-            "expiresAt": obj.get("expiresAt"),
             "failureCode": obj.get("failureCode"),
             "failureMessage": obj.get("failureMessage"),
+            "refundSummary": RefundSummary.from_dict(obj["refundSummary"]) if obj.get("refundSummary") is not None else None,
             "completedAt": obj.get("completedAt"),
             "createdAt": obj.get("createdAt"),
             "updatedAt": obj.get("updatedAt")

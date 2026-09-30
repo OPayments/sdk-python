@@ -97,7 +97,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_payments**
-> PaymentList list_payments(order_id=order_id, status=status, payment_method=payment_method, amount_from=amount_from, amount_to=amount_to, created_from=created_from, created_to=created_to, sort=sort, sort_direction=sort_direction, cursor=cursor, limit=limit)
+> PaymentList list_payments(order_id=order_id, status=status, payment_method=payment_method, amount_from=amount_from, amount_to=amount_to, created_from=created_from, created_to=created_to, completed_from=completed_from, completed_to=completed_to, failure_code=failure_code, search=search, sort=sort, sort_direction=sort_direction, cursor=cursor, limit=limit)
 
 Найти платежи
 
@@ -148,14 +148,18 @@ with opayments_sdk.ApiClient(configuration) as api_client:
     amount_to = 56 # int | Не меньше amountFrom, если он передан. (optional)
     created_from = '2013-10-20T19:20:30+01:00' # datetime | Не позже createdTo, если он передан. (optional)
     created_to = '2013-10-20T19:20:30+01:00' # datetime | Не раньше createdFrom, если он передан. (optional)
+    completed_from = '2013-10-20T19:20:30+01:00' # datetime | Не позже completedTo, если он передан. (optional)
+    completed_to = '2013-10-20T19:20:30+01:00' # datetime | Не раньше completedFrom, если он передан. (optional)
+    failure_code = 'failure_code_example' # str | Нормализованный код причины платежа. (optional)
+    search = 'search_example' # str | Поиск по paymentId, orderId и описанию платежа. (optional)
     sort = 'createdAt' # str |  (optional) (default to 'createdAt')
     sort_direction = 'desc' # str |  (optional) (default to 'desc')
-    cursor = 'cursor_example' # str | Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. (optional)
+    cursor = 'cursor_example' # str | Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID. (optional)
     limit = 20 # int | Количество записей в ответе. (optional) (default to 20)
 
     try:
         # Найти платежи
-        api_response = api_instance.list_payments(order_id=order_id, status=status, payment_method=payment_method, amount_from=amount_from, amount_to=amount_to, created_from=created_from, created_to=created_to, sort=sort, sort_direction=sort_direction, cursor=cursor, limit=limit)
+        api_response = api_instance.list_payments(order_id=order_id, status=status, payment_method=payment_method, amount_from=amount_from, amount_to=amount_to, created_from=created_from, created_to=created_to, completed_from=completed_from, completed_to=completed_to, failure_code=failure_code, search=search, sort=sort, sort_direction=sort_direction, cursor=cursor, limit=limit)
         print("The response of PaymentsApi->list_payments:\n")
         pprint(api_response)
     except Exception as e:
@@ -176,9 +180,13 @@ Name | Type | Description  | Notes
  **amount_to** | **int**| Не меньше amountFrom, если он передан. | [optional] 
  **created_from** | **datetime**| Не позже createdTo, если он передан. | [optional] 
  **created_to** | **datetime**| Не раньше createdFrom, если он передан. | [optional] 
+ **completed_from** | **datetime**| Не позже completedTo, если он передан. | [optional] 
+ **completed_to** | **datetime**| Не раньше completedFrom, если он передан. | [optional] 
+ **failure_code** | **str**| Нормализованный код причины платежа. | [optional] 
+ **search** | **str**| Поиск по paymentId, orderId и описанию платежа. | [optional] 
  **sort** | **str**|  | [optional] [default to &#39;createdAt&#39;]
  **sort_direction** | **str**|  | [optional] [default to &#39;desc&#39;]
- **cursor** | **str**| Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. | [optional] 
+ **cursor** | **str**| Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID. | [optional] 
  **limit** | **int**| Количество записей в ответе. | [optional] [default to 20]
 
 ### Return type

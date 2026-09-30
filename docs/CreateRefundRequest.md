@@ -6,7 +6,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **amount** | **int** | Сумма в копейках. | [optional] 
-**reason** | **str** |  | [optional] 
+**reason_code** | [**RefundReason**](RefundReason.md) |  | [optional] 
+**reason_comment** | **str** |  | [optional] 
+**reason** | **str** | Устаревшее произвольное описание причины. Новые клиенты используют reasonCode и опционально reasonComment. | [optional] 
 
 ## Example
 

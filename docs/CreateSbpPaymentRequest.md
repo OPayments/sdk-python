@@ -7,13 +7,11 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **order_id** | **str** | Идентификатор заказа в системе мерчанта. | 
 **amount** | **int** | Сумма в копейках. | 
-**currency** | **str** |  | 
 **description** | **str** |  | [optional] 
-**ip** | **str** | IP-адрес плательщика: IPv4 или IPv6. | 
-**callback_url** | **str** | HTTPS-адрес уведомлений. | 
+**metadata** | [**PaymentMetadata**](PaymentMetadata.md) |  | 
+**callback_url** | **str** | HTTPS-адрес для уведомлений о платеже. | 
 **success_url** | **str** | HTTPS-адрес для успешной оплаты. | 
 **failed_url** | **str** | HTTPS-адрес для отменённой оплаты. | 
-**device_data** | [**DeviceData**](DeviceData.md) |  | [optional] 
 
 ## Example
 

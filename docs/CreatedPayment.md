@@ -13,9 +13,9 @@ Name | Type | Description | Notes
 **payment_method** | **str** |  | 
 **status** | **str** |  | 
 **payment_url** | **str** |  | 
-**expires_at** | **datetime** |  | 
 **failure_code** | **str** |  | [optional] 
-**failure_message** | **str** |  | [optional] 
+**failure_message** | **str** | Нормализованное сообщение, безопасное для показа мерчанту; никогда не содержит сырой ответ провайдера, credentials или данные карты. | [optional] 
+**refund_summary** | [**RefundSummary**](RefundSummary.md) |  | [optional] 
 **completed_at** | **datetime** |  | [optional] 
 **created_at** | **datetime** |  | 
 **updated_at** | **datetime** |  | 

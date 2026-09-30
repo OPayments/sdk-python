@@ -33,10 +33,24 @@ class TestRefundsApi(unittest.TestCase):
         """
         pass
 
-    def test_get_payment_refund(self) -> None:
-        """Test case for get_payment_refund
+    def test_get_refund(self) -> None:
+        """Test case for get_refund
 
         Получить возврат
+        """
+        pass
+
+    def test_list_payment_refunds(self) -> None:
+        """Test case for list_payment_refunds
+
+        Найти возвраты платежа
+        """
+        pass
+
+    def test_list_refunds(self) -> None:
+        """Test case for list_refunds
+
+        Найти возвраты проекта
         """
         pass
 

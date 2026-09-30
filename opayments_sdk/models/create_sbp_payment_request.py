@@ -17,10 +17,10 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
-from opayments_sdk.models.device_data import DeviceData
+from opayments_sdk.models.payment_metadata import PaymentMetadata
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -31,21 +31,12 @@ class CreateSbpPaymentRequest(BaseModel):
     """ # noqa: E501
     order_id: Annotated[str, Field(min_length=1, strict=True, max_length=128)] = Field(description="Идентификатор заказа в системе мерчанта.", alias="orderId")
     amount: Annotated[int, Field(strict=True, ge=1)] = Field(description="Сумма в копейках.")
-    currency: StrictStr
     description: Optional[Annotated[str, Field(strict=True, max_length=255)]] = None
-    ip: Annotated[str, Field(strict=True, max_length=45)] = Field(description="IP-адрес плательщика: IPv4 или IPv6.")
-    callback_url: Annotated[str, Field(strict=True, max_length=2048)] = Field(description="HTTPS-адрес уведомлений.", alias="callbackUrl")
+    metadata: PaymentMetadata
+    callback_url: Annotated[str, Field(strict=True, max_length=2048)] = Field(description="HTTPS-адрес для уведомлений о платеже.", alias="callbackUrl")
     success_url: Annotated[str, Field(strict=True, max_length=2048)] = Field(description="HTTPS-адрес для успешной оплаты.", alias="successUrl")
     failed_url: Annotated[str, Field(strict=True, max_length=2048)] = Field(description="HTTPS-адрес для отменённой оплаты.", alias="failedUrl")
-    device_data: Optional[DeviceData] = Field(default=None, alias="deviceData")
-    __properties: ClassVar[List[str]] = ["orderId", "amount", "currency", "description", "ip", "callbackUrl", "successUrl", "failedUrl", "deviceData"]
-
-    @field_validator('currency')
-    def currency_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['RUB']):
-            raise ValueError("must be one of enum values ('RUB')")
-        return value
+    __properties: ClassVar[List[str]] = ["orderId", "amount", "description", "metadata", "callbackUrl", "successUrl", "failedUrl"]
 
     @field_validator('callback_url', mode="before")
     def callback_url_validate_regular_expression(cls, value):
@@ -107,9 +98,9 @@ class CreateSbpPaymentRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of device_data
-        if self.device_data:
-            _dict['deviceData'] = self.device_data.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of metadata
+        if self.metadata:
+            _dict['metadata'] = self.metadata.to_dict()
         return _dict
 
     @classmethod
@@ -124,13 +115,11 @@ class CreateSbpPaymentRequest(BaseModel):
         _obj = cls.model_validate({
             "orderId": obj.get("orderId"),
             "amount": obj.get("amount"),
-            "currency": obj.get("currency"),
             "description": obj.get("description"),
-            "ip": obj.get("ip"),
+            "metadata": PaymentMetadata.from_dict(obj["metadata"]) if obj.get("metadata") is not None else None,
             "callbackUrl": obj.get("callbackUrl"),
             "successUrl": obj.get("successUrl"),
-            "failedUrl": obj.get("failedUrl"),
-            "deviceData": DeviceData.from_dict(obj["deviceData"]) if obj.get("deviceData") is not None else None
+            "failedUrl": obj.get("failedUrl")
         })
         return _obj
 

@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 
 # **create_sbp_payment**
-> Payment create_sbp_payment(create_sbp_payment_request)
+> Payment create_sbp_payment(create_sbp_payment_request, idempotency_key=idempotency_key)
 
 Создать платёж по СБП
 
@@ -53,10 +53,11 @@ with opayments_sdk.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = opayments_sdk.PaymentApi(api_client)
     create_sbp_payment_request = opayments_sdk.CreateSbpPaymentRequest() # CreateSbpPaymentRequest | 
+    idempotency_key = 'idempotency_key_example' # str |  (optional)
 
     try:
         # Создать платёж по СБП
-        api_response = api_instance.create_sbp_payment(create_sbp_payment_request)
+        api_response = api_instance.create_sbp_payment(create_sbp_payment_request, idempotency_key=idempotency_key)
         print("The response of PaymentApi->create_sbp_payment:\n")
         pprint(api_response)
     except Exception as e:
@@ -71,6 +72,7 @@ with opayments_sdk.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **create_sbp_payment_request** | [**CreateSbpPaymentRequest**](CreateSbpPaymentRequest.md)|  | 
+ **idempotency_key** | **str**|  | [optional] 
 
 ### Return type
 
@@ -98,13 +100,13 @@ Name | Type | Description  | Notes
 **415** | Тело запроса должно быть JSON. |  * X-Request-Id -  <br>  |
 **429** | Превышен лимит запросов. |  * X-Request-Id -  <br>  * X-RateLimit-Limit -  <br>  * X-RateLimit-Remaining -  <br>  * X-RateLimit-Reset - Unix-время сброса лимита. <br>  * Retry-After -  <br>  |
 **502** | Внешний сервис вернул некорректный ответ. |  * X-Request-Id -  <br>  |
-**503** | Сервис временно недоступен. |  * X-Request-Id -  <br>  |
+**503** | Сервис временно недоступен. |  * X-Request-Id -  <br>  * Retry-After -  <br>  |
 **504** | Внешний сервис не ответил вовремя. |  * X-Request-Id -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_tpay_payment**
-> Payment create_tpay_payment(create_tpay_payment_request)
+> Payment create_tpay_payment(create_tpay_payment_request, idempotency_key=idempotency_key)
 
 Создать платёж через T-Pay
 
@@ -148,10 +150,11 @@ with opayments_sdk.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = opayments_sdk.PaymentApi(api_client)
     create_tpay_payment_request = opayments_sdk.CreateTpayPaymentRequest() # CreateTpayPaymentRequest | 
+    idempotency_key = 'idempotency_key_example' # str |  (optional)
 
     try:
         # Создать платёж через T-Pay
-        api_response = api_instance.create_tpay_payment(create_tpay_payment_request)
+        api_response = api_instance.create_tpay_payment(create_tpay_payment_request, idempotency_key=idempotency_key)
         print("The response of PaymentApi->create_tpay_payment:\n")
         pprint(api_response)
     except Exception as e:
@@ -166,6 +169,7 @@ with opayments_sdk.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **create_tpay_payment_request** | [**CreateTpayPaymentRequest**](CreateTpayPaymentRequest.md)|  | 
+ **idempotency_key** | **str**|  | [optional] 
 
 ### Return type
 
@@ -193,7 +197,7 @@ Name | Type | Description  | Notes
 **415** | Тело запроса должно быть JSON. |  * X-Request-Id -  <br>  |
 **429** | Превышен лимит запросов. |  * X-Request-Id -  <br>  * X-RateLimit-Limit -  <br>  * X-RateLimit-Remaining -  <br>  * X-RateLimit-Reset - Unix-время сброса лимита. <br>  * Retry-After -  <br>  |
 **502** | Внешний сервис вернул некорректный ответ. |  * X-Request-Id -  <br>  |
-**503** | Сервис временно недоступен. |  * X-Request-Id -  <br>  |
+**503** | Сервис временно недоступен. |  * X-Request-Id -  <br>  * Retry-After -  <br>  |
 **504** | Внешний сервис не ответил вовремя. |  * X-Request-Id -  <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

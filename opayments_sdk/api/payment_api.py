@@ -15,6 +15,9 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
+from pydantic import Field
+from typing import Optional
+from typing_extensions import Annotated
 from opayments_sdk.models.create_sbp_payment_request import CreateSbpPaymentRequest
 from opayments_sdk.models.create_tpay_payment_request import CreateTpayPaymentRequest
 from opayments_sdk.models.payment import Payment
@@ -41,6 +44,7 @@ class PaymentApi:
     def create_sbp_payment(
         self,
         create_sbp_payment_request: CreateSbpPaymentRequest,
+        idempotency_key: Optional[Annotated[str, Field(min_length=4, strict=True, max_length=64)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -59,6 +63,8 @@ class PaymentApi:
 
         :param create_sbp_payment_request: (required)
         :type create_sbp_payment_request: CreateSbpPaymentRequest
+        :param idempotency_key:
+        :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -83,6 +89,7 @@ class PaymentApi:
 
         _param = self._create_sbp_payment_serialize(
             create_sbp_payment_request=create_sbp_payment_request,
+            idempotency_key=idempotency_key,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -117,6 +124,7 @@ class PaymentApi:
     def create_sbp_payment_with_http_info(
         self,
         create_sbp_payment_request: CreateSbpPaymentRequest,
+        idempotency_key: Optional[Annotated[str, Field(min_length=4, strict=True, max_length=64)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -135,6 +143,8 @@ class PaymentApi:
 
         :param create_sbp_payment_request: (required)
         :type create_sbp_payment_request: CreateSbpPaymentRequest
+        :param idempotency_key:
+        :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -159,6 +169,7 @@ class PaymentApi:
 
         _param = self._create_sbp_payment_serialize(
             create_sbp_payment_request=create_sbp_payment_request,
+            idempotency_key=idempotency_key,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -193,6 +204,7 @@ class PaymentApi:
     def create_sbp_payment_without_preload_content(
         self,
         create_sbp_payment_request: CreateSbpPaymentRequest,
+        idempotency_key: Optional[Annotated[str, Field(min_length=4, strict=True, max_length=64)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -211,6 +223,8 @@ class PaymentApi:
 
         :param create_sbp_payment_request: (required)
         :type create_sbp_payment_request: CreateSbpPaymentRequest
+        :param idempotency_key:
+        :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -235,6 +249,7 @@ class PaymentApi:
 
         _param = self._create_sbp_payment_serialize(
             create_sbp_payment_request=create_sbp_payment_request,
+            idempotency_key=idempotency_key,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -264,6 +279,7 @@ class PaymentApi:
     def _create_sbp_payment_serialize(
         self,
         create_sbp_payment_request,
+        idempotency_key,
         _request_auth,
         _content_type,
         _headers,
@@ -287,6 +303,8 @@ class PaymentApi:
         # process the path parameters
         # process the query parameters
         # process the header parameters
+        if idempotency_key is not None:
+            _header_params['Idempotency-Key'] = idempotency_key
         # process the form parameters
         # process the body parameter
         if create_sbp_payment_request is not None:
@@ -343,6 +361,7 @@ class PaymentApi:
     def create_tpay_payment(
         self,
         create_tpay_payment_request: CreateTpayPaymentRequest,
+        idempotency_key: Optional[Annotated[str, Field(min_length=4, strict=True, max_length=64)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -361,6 +380,8 @@ class PaymentApi:
 
         :param create_tpay_payment_request: (required)
         :type create_tpay_payment_request: CreateTpayPaymentRequest
+        :param idempotency_key:
+        :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -385,6 +406,7 @@ class PaymentApi:
 
         _param = self._create_tpay_payment_serialize(
             create_tpay_payment_request=create_tpay_payment_request,
+            idempotency_key=idempotency_key,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -419,6 +441,7 @@ class PaymentApi:
     def create_tpay_payment_with_http_info(
         self,
         create_tpay_payment_request: CreateTpayPaymentRequest,
+        idempotency_key: Optional[Annotated[str, Field(min_length=4, strict=True, max_length=64)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -437,6 +460,8 @@ class PaymentApi:
 
         :param create_tpay_payment_request: (required)
         :type create_tpay_payment_request: CreateTpayPaymentRequest
+        :param idempotency_key:
+        :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -461,6 +486,7 @@ class PaymentApi:
 
         _param = self._create_tpay_payment_serialize(
             create_tpay_payment_request=create_tpay_payment_request,
+            idempotency_key=idempotency_key,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -495,6 +521,7 @@ class PaymentApi:
     def create_tpay_payment_without_preload_content(
         self,
         create_tpay_payment_request: CreateTpayPaymentRequest,
+        idempotency_key: Optional[Annotated[str, Field(min_length=4, strict=True, max_length=64)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -513,6 +540,8 @@ class PaymentApi:
 
         :param create_tpay_payment_request: (required)
         :type create_tpay_payment_request: CreateTpayPaymentRequest
+        :param idempotency_key:
+        :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -537,6 +566,7 @@ class PaymentApi:
 
         _param = self._create_tpay_payment_serialize(
             create_tpay_payment_request=create_tpay_payment_request,
+            idempotency_key=idempotency_key,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -566,6 +596,7 @@ class PaymentApi:
     def _create_tpay_payment_serialize(
         self,
         create_tpay_payment_request,
+        idempotency_key,
         _request_auth,
         _content_type,
         _headers,
@@ -589,6 +620,8 @@ class PaymentApi:
         # process the path parameters
         # process the query parameters
         # process the header parameters
+        if idempotency_key is not None:
+            _header_params['Idempotency-Key'] = idempotency_key
         # process the form parameters
         # process the body parameter
         if create_tpay_payment_request is not None:

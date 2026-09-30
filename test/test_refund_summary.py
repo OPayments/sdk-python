@@ -14,10 +14,10 @@
 
 import unittest
 
-from opayments_sdk.models.create_refund_request import CreateRefundRequest
+from opayments_sdk.models.refund_summary import RefundSummary
 
-class TestCreateRefundRequest(unittest.TestCase):
-    """CreateRefundRequest unit test stubs"""
+class TestRefundSummary(unittest.TestCase):
+    """RefundSummary unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,28 +25,30 @@ class TestCreateRefundRequest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> CreateRefundRequest:
-        """Test CreateRefundRequest
+    def make_instance(self, include_optional) -> RefundSummary:
+        """Test RefundSummary
             include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `CreateRefundRequest`
+        # uncomment below to create an instance of `RefundSummary`
         """
-        model = CreateRefundRequest()
+        model = RefundSummary()
         if include_optional:
-            return CreateRefundRequest(
-                amount = 1,
-                reason_code = 'requested_by_customer',
-                reason_comment = '',
-                reason = ''
+            return RefundSummary(
+                refunded_amount = 0,
+                refundable_amount = 0,
+                refund_count = 0
             )
         else:
-            return CreateRefundRequest(
+            return RefundSummary(
+                refunded_amount = 0,
+                refundable_amount = 0,
+                refund_count = 0,
         )
         """
 
-    def testCreateRefundRequest(self):
-        """Test CreateRefundRequest"""
+    def testRefundSummary(self):
+        """Test RefundSummary"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

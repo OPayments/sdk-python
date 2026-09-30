@@ -17,20 +17,21 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List
-from opayments_sdk.models.error_error import ErrorError
+from opayments_sdk.models.refund import Refund
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
 
-class Error(BaseModel):
+class RefundPage(BaseModel):
     """
-    Error
+    RefundPage
     """ # noqa: E501
-    error: ErrorError
-    additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["error"]
+    items: List[Refund]
+    next_cursor: StrictStr = Field(description="Непрозрачный курсор следующей страницы.", alias="nextCursor")
+    has_more: StrictBool = Field(alias="hasMore")
+    __properties: ClassVar[List[str]] = ["items", "nextCursor", "hasMore"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -50,7 +51,7 @@ class Error(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Error from a JSON string"""
+        """Create an instance of RefundPage from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -62,10 +63,8 @@ class Error(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
-        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
-            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -73,19 +72,17 @@ class Error(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of error
-        if self.error:
-            _dict['error'] = self.error.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
+        # override the default output from pydantic by calling `to_dict()` of each item in items (list)
+        _items = []
+        if self.items:
+            for _item_items in self.items:
+                _items.append(_item_items.to_dict() if _item_items is not None else None)
+            _dict['items'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Error from a dict"""
+        """Create an instance of RefundPage from a dict"""
         if obj is None:
             return None
 
@@ -93,13 +90,10 @@ class Error(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "error": ErrorError.from_dict(obj["error"]) if obj.get("error") is not None else None
+            "items": [Refund.from_dict(_item) for _item in obj["items"]] if obj.get("items") is not None else None,
+            "nextCursor": obj.get("nextCursor"),
+            "hasMore": obj.get("hasMore")
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

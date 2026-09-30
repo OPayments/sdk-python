@@ -35,10 +35,13 @@ class TestFinalRefund(unittest.TestCase):
         model = FinalRefund()
         if include_optional:
             return FinalRefund(
+                refund_id = '',
                 payment_id = '',
                 amount = 1,
                 currency = 'RUB',
                 status = 'accepted',
+                reason_code = 'requested_by_customer',
+                reason_comment = '',
                 reason = '',
                 failure_code = '',
                 failure_message = '',
@@ -49,6 +52,7 @@ class TestFinalRefund(unittest.TestCase):
             )
         else:
             return FinalRefund(
+                refund_id = '',
                 payment_id = '',
                 amount = 1,
                 currency = 'RUB',

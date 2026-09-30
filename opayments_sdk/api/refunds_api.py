@@ -15,9 +15,15 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
+from datetime import datetime
+from pydantic import Field, StrictStr, field_validator
+from typing import Optional
+from typing_extensions import Annotated
 from uuid import UUID
 from opayments_sdk.models.create_refund_request import CreateRefundRequest
 from opayments_sdk.models.refund import Refund
+from opayments_sdk.models.refund_page import RefundPage
+from opayments_sdk.models.refund_reason import RefundReason
 
 from opayments_sdk.api_client import ApiClient, RequestSerialized
 from opayments_sdk.api_response import ApiResponse
@@ -42,6 +48,7 @@ class RefundsApi:
         self,
         payment_id: UUID,
         create_refund_request: CreateRefundRequest,
+        idempotency_key: Optional[Annotated[str, Field(min_length=4, strict=True, max_length=64)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -62,6 +69,8 @@ class RefundsApi:
         :type payment_id: UUID
         :param create_refund_request: (required)
         :type create_refund_request: CreateRefundRequest
+        :param idempotency_key:
+        :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -87,6 +96,7 @@ class RefundsApi:
         _param = self._create_payment_refund_serialize(
             payment_id=payment_id,
             create_refund_request=create_refund_request,
+            idempotency_key=idempotency_key,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -100,8 +110,8 @@ class RefundsApi:
             '401': "Error",
             '404': "Error",
             '409': "Error",
-            '415': "Error",
             '422': "Error",
+            '415': "Error",
             '429': "Error",
             '500': "Error",
             '502': "Error",
@@ -124,6 +134,7 @@ class RefundsApi:
         self,
         payment_id: UUID,
         create_refund_request: CreateRefundRequest,
+        idempotency_key: Optional[Annotated[str, Field(min_length=4, strict=True, max_length=64)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -144,6 +155,8 @@ class RefundsApi:
         :type payment_id: UUID
         :param create_refund_request: (required)
         :type create_refund_request: CreateRefundRequest
+        :param idempotency_key:
+        :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -169,6 +182,7 @@ class RefundsApi:
         _param = self._create_payment_refund_serialize(
             payment_id=payment_id,
             create_refund_request=create_refund_request,
+            idempotency_key=idempotency_key,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -182,8 +196,8 @@ class RefundsApi:
             '401': "Error",
             '404': "Error",
             '409': "Error",
-            '415': "Error",
             '422': "Error",
+            '415': "Error",
             '429': "Error",
             '500': "Error",
             '502': "Error",
@@ -206,6 +220,7 @@ class RefundsApi:
         self,
         payment_id: UUID,
         create_refund_request: CreateRefundRequest,
+        idempotency_key: Optional[Annotated[str, Field(min_length=4, strict=True, max_length=64)]] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -226,6 +241,8 @@ class RefundsApi:
         :type payment_id: UUID
         :param create_refund_request: (required)
         :type create_refund_request: CreateRefundRequest
+        :param idempotency_key:
+        :type idempotency_key: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -251,6 +268,7 @@ class RefundsApi:
         _param = self._create_payment_refund_serialize(
             payment_id=payment_id,
             create_refund_request=create_refund_request,
+            idempotency_key=idempotency_key,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -264,8 +282,8 @@ class RefundsApi:
             '401': "Error",
             '404': "Error",
             '409': "Error",
-            '415': "Error",
             '422': "Error",
+            '415': "Error",
             '429': "Error",
             '500': "Error",
             '502': "Error",
@@ -283,6 +301,7 @@ class RefundsApi:
         self,
         payment_id,
         create_refund_request,
+        idempotency_key,
         _request_auth,
         _content_type,
         _headers,
@@ -308,6 +327,8 @@ class RefundsApi:
             _path_params['paymentId'] = payment_id
         # process the query parameters
         # process the header parameters
+        if idempotency_key is not None:
+            _header_params['Idempotency-Key'] = idempotency_key
         # process the form parameters
         # process the body parameter
         if create_refund_request is not None:
@@ -344,7 +365,7 @@ class RefundsApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/payments/{paymentId}/refund',
+            resource_path='/payments/{paymentId}/refunds',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -361,9 +382,9 @@ class RefundsApi:
 
 
     @validate_call
-    def get_payment_refund(
+    def get_refund(
         self,
-        payment_id: UUID,
+        refund_id: UUID,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -380,8 +401,8 @@ class RefundsApi:
         """Получить возврат
 
 
-        :param payment_id: (required)
-        :type payment_id: UUID
+        :param refund_id: (required)
+        :type refund_id: UUID
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -404,8 +425,8 @@ class RefundsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_payment_refund_serialize(
-            payment_id=payment_id,
+        _param = self._get_refund_serialize(
+            refund_id=refund_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -431,9 +452,9 @@ class RefundsApi:
 
 
     @validate_call
-    def get_payment_refund_with_http_info(
+    def get_refund_with_http_info(
         self,
-        payment_id: UUID,
+        refund_id: UUID,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -450,8 +471,8 @@ class RefundsApi:
         """Получить возврат
 
 
-        :param payment_id: (required)
-        :type payment_id: UUID
+        :param refund_id: (required)
+        :type refund_id: UUID
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -474,8 +495,8 @@ class RefundsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_payment_refund_serialize(
-            payment_id=payment_id,
+        _param = self._get_refund_serialize(
+            refund_id=refund_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -501,9 +522,9 @@ class RefundsApi:
 
 
     @validate_call
-    def get_payment_refund_without_preload_content(
+    def get_refund_without_preload_content(
         self,
-        payment_id: UUID,
+        refund_id: UUID,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -520,8 +541,8 @@ class RefundsApi:
         """Получить возврат
 
 
-        :param payment_id: (required)
-        :type payment_id: UUID
+        :param refund_id: (required)
+        :type refund_id: UUID
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -544,8 +565,8 @@ class RefundsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_payment_refund_serialize(
-            payment_id=payment_id,
+        _param = self._get_refund_serialize(
+            refund_id=refund_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -566,9 +587,332 @@ class RefundsApi:
         return response_data.response
 
 
-    def _get_payment_refund_serialize(
+    def _get_refund_serialize(
+        self,
+        refund_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if refund_id is not None:
+            _path_params['refundId'] = refund_id
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'RequestSignature', 
+            'ProjectIdentity'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/refunds/{refundId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def list_payment_refunds(
+        self,
+        payment_id: UUID,
+        status: Optional[StrictStr] = None,
+        reason_code: Optional[RefundReason] = None,
+        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.")] = None,
+        limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Количество записей в ответе.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RefundPage:
+        """Найти возвраты платежа
+
+
+        :param payment_id: (required)
+        :type payment_id: UUID
+        :param status:
+        :type status: str
+        :param reason_code:
+        :type reason_code: RefundReason
+        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.
+        :type cursor: str
+        :param limit: Количество записей в ответе.
+        :type limit: int
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_payment_refunds_serialize(
+            payment_id=payment_id,
+            status=status,
+            reason_code=reason_code,
+            cursor=cursor,
+            limit=limit,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "RefundPage",
+            '400': "Error",
+            '401': "Error",
+            '404': "Error",
+            '429': "Error",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def list_payment_refunds_with_http_info(
+        self,
+        payment_id: UUID,
+        status: Optional[StrictStr] = None,
+        reason_code: Optional[RefundReason] = None,
+        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.")] = None,
+        limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Количество записей в ответе.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[RefundPage]:
+        """Найти возвраты платежа
+
+
+        :param payment_id: (required)
+        :type payment_id: UUID
+        :param status:
+        :type status: str
+        :param reason_code:
+        :type reason_code: RefundReason
+        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.
+        :type cursor: str
+        :param limit: Количество записей в ответе.
+        :type limit: int
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_payment_refunds_serialize(
+            payment_id=payment_id,
+            status=status,
+            reason_code=reason_code,
+            cursor=cursor,
+            limit=limit,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "RefundPage",
+            '400': "Error",
+            '401': "Error",
+            '404': "Error",
+            '429': "Error",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def list_payment_refunds_without_preload_content(
+        self,
+        payment_id: UUID,
+        status: Optional[StrictStr] = None,
+        reason_code: Optional[RefundReason] = None,
+        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.")] = None,
+        limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Количество записей в ответе.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Найти возвраты платежа
+
+
+        :param payment_id: (required)
+        :type payment_id: UUID
+        :param status:
+        :type status: str
+        :param reason_code:
+        :type reason_code: RefundReason
+        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.
+        :type cursor: str
+        :param limit: Количество записей в ответе.
+        :type limit: int
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_payment_refunds_serialize(
+            payment_id=payment_id,
+            status=status,
+            reason_code=reason_code,
+            cursor=cursor,
+            limit=limit,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "RefundPage",
+            '400': "Error",
+            '401': "Error",
+            '404': "Error",
+            '429': "Error",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _list_payment_refunds_serialize(
         self,
         payment_id,
+        status,
+        reason_code,
+        cursor,
+        limit,
         _request_auth,
         _content_type,
         _headers,
@@ -593,6 +937,22 @@ class RefundsApi:
         if payment_id is not None:
             _path_params['paymentId'] = payment_id
         # process the query parameters
+        if status is not None:
+            
+            _query_params.append(('status', status))
+            
+        if reason_code is not None:
+            
+            _query_params.append(('reasonCode', reason_code.value))
+            
+        if cursor is not None:
+            
+            _query_params.append(('cursor', cursor))
+            
+        if limit is not None:
+            
+            _query_params.append(('limit', limit))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -615,7 +975,417 @@ class RefundsApi:
 
         return self.api_client.param_serialize(
             method='GET',
-            resource_path='/payments/{paymentId}/refund',
+            resource_path='/payments/{paymentId}/refunds',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def list_refunds(
+        self,
+        status: Optional[StrictStr] = None,
+        payment_method: Optional[StrictStr] = None,
+        payment_id: Annotated[Optional[UUID], Field(description="Идентификатор исходного платежа.")] = None,
+        reason_code: Optional[RefundReason] = None,
+        created_from: Annotated[Optional[datetime], Field(description="Не позже createdTo, если он передан.")] = None,
+        created_to: Annotated[Optional[datetime], Field(description="Не раньше createdFrom, если он передан.")] = None,
+        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.")] = None,
+        limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Количество записей в ответе.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RefundPage:
+        """Найти возвраты проекта
+
+        Возвращает возвраты по всем платежам текущего проекта. Сортировка всегда `createdAt DESC, refundId DESC`; курсор нельзя использовать с другими фильтрами.
+
+        :param status:
+        :type status: str
+        :param payment_method:
+        :type payment_method: str
+        :param payment_id: Идентификатор исходного платежа.
+        :type payment_id: UUID
+        :param reason_code:
+        :type reason_code: RefundReason
+        :param created_from: Не позже createdTo, если он передан.
+        :type created_from: datetime
+        :param created_to: Не раньше createdFrom, если он передан.
+        :type created_to: datetime
+        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.
+        :type cursor: str
+        :param limit: Количество записей в ответе.
+        :type limit: int
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_refunds_serialize(
+            status=status,
+            payment_method=payment_method,
+            payment_id=payment_id,
+            reason_code=reason_code,
+            created_from=created_from,
+            created_to=created_to,
+            cursor=cursor,
+            limit=limit,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "RefundPage",
+            '400': "Error",
+            '401': "Error",
+            '429': "Error",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def list_refunds_with_http_info(
+        self,
+        status: Optional[StrictStr] = None,
+        payment_method: Optional[StrictStr] = None,
+        payment_id: Annotated[Optional[UUID], Field(description="Идентификатор исходного платежа.")] = None,
+        reason_code: Optional[RefundReason] = None,
+        created_from: Annotated[Optional[datetime], Field(description="Не позже createdTo, если он передан.")] = None,
+        created_to: Annotated[Optional[datetime], Field(description="Не раньше createdFrom, если он передан.")] = None,
+        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.")] = None,
+        limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Количество записей в ответе.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[RefundPage]:
+        """Найти возвраты проекта
+
+        Возвращает возвраты по всем платежам текущего проекта. Сортировка всегда `createdAt DESC, refundId DESC`; курсор нельзя использовать с другими фильтрами.
+
+        :param status:
+        :type status: str
+        :param payment_method:
+        :type payment_method: str
+        :param payment_id: Идентификатор исходного платежа.
+        :type payment_id: UUID
+        :param reason_code:
+        :type reason_code: RefundReason
+        :param created_from: Не позже createdTo, если он передан.
+        :type created_from: datetime
+        :param created_to: Не раньше createdFrom, если он передан.
+        :type created_to: datetime
+        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.
+        :type cursor: str
+        :param limit: Количество записей в ответе.
+        :type limit: int
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_refunds_serialize(
+            status=status,
+            payment_method=payment_method,
+            payment_id=payment_id,
+            reason_code=reason_code,
+            created_from=created_from,
+            created_to=created_to,
+            cursor=cursor,
+            limit=limit,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "RefundPage",
+            '400': "Error",
+            '401': "Error",
+            '429': "Error",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def list_refunds_without_preload_content(
+        self,
+        status: Optional[StrictStr] = None,
+        payment_method: Optional[StrictStr] = None,
+        payment_id: Annotated[Optional[UUID], Field(description="Идентификатор исходного платежа.")] = None,
+        reason_code: Optional[RefundReason] = None,
+        created_from: Annotated[Optional[datetime], Field(description="Не позже createdTo, если он передан.")] = None,
+        created_to: Annotated[Optional[datetime], Field(description="Не раньше createdFrom, если он передан.")] = None,
+        cursor: Annotated[Optional[StrictStr], Field(description="Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.")] = None,
+        limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Количество записей в ответе.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Найти возвраты проекта
+
+        Возвращает возвраты по всем платежам текущего проекта. Сортировка всегда `createdAt DESC, refundId DESC`; курсор нельзя использовать с другими фильтрами.
+
+        :param status:
+        :type status: str
+        :param payment_method:
+        :type payment_method: str
+        :param payment_id: Идентификатор исходного платежа.
+        :type payment_id: UUID
+        :param reason_code:
+        :type reason_code: RefundReason
+        :param created_from: Не позже createdTo, если он передан.
+        :type created_from: datetime
+        :param created_to: Не раньше createdFrom, если он передан.
+        :type created_to: datetime
+        :param cursor: Непрозрачный курсор из предыдущего ответа. Используйте только с теми же фильтрами и сортировкой. При одинаковом sort key API использует стабильный вторичный ID.
+        :type cursor: str
+        :param limit: Количество записей в ответе.
+        :type limit: int
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._list_refunds_serialize(
+            status=status,
+            payment_method=payment_method,
+            payment_id=payment_id,
+            reason_code=reason_code,
+            created_from=created_from,
+            created_to=created_to,
+            cursor=cursor,
+            limit=limit,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "RefundPage",
+            '400': "Error",
+            '401': "Error",
+            '429': "Error",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _list_refunds_serialize(
+        self,
+        status,
+        payment_method,
+        payment_id,
+        reason_code,
+        created_from,
+        created_to,
+        cursor,
+        limit,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if status is not None:
+            
+            _query_params.append(('status', status))
+            
+        if payment_method is not None:
+            
+            _query_params.append(('paymentMethod', payment_method))
+            
+        if payment_id is not None:
+            
+            _query_params.append(('paymentId', payment_id))
+            
+        if reason_code is not None:
+            
+            _query_params.append(('reasonCode', reason_code.value))
+            
+        if created_from is not None:
+            if isinstance(created_from, datetime):
+                _query_params.append(
+                    (
+                        'createdFrom',
+                        created_from.strftime(
+                            self.api_client.configuration.datetime_format
+                        )
+                    )
+                )
+            else:
+                _query_params.append(('createdFrom', created_from))
+            
+        if created_to is not None:
+            if isinstance(created_to, datetime):
+                _query_params.append(
+                    (
+                        'createdTo',
+                        created_to.strftime(
+                            self.api_client.configuration.datetime_format
+                        )
+                    )
+                )
+            else:
+                _query_params.append(('createdTo', created_to))
+            
+        if cursor is not None:
+            
+            _query_params.append(('cursor', cursor))
+            
+        if limit is not None:
+            
+            _query_params.append(('limit', limit))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'RequestSignature', 
+            'ProjectIdentity'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/refunds',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
